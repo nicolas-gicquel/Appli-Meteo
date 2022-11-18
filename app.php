@@ -24,7 +24,7 @@ curl_close($ch);
 
 //Décodage des données afin de pour les exploiter//
 $data = json_decode($response);
-var_dump($data);
+// var_dump($data);
 
 
 //Initialisation de la varible temps//

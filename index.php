@@ -1,8 +1,12 @@
 <?php
 require('app.php');
-$date = date('Y-m-d');
-$heure = date('H:i');
-setlocale(LC_TIME, "fr_FR", 'french');
+$date = new DateTime();
+$date_fr = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE);
+$date_fr->setPattern('EEEE d MMMM y');
+$hour_fr = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE);
+date_default_timezone_set('Europe/Paris');
+$hour_fr=date('H:i');
+
 
 ?>
 <!DOCTYPE html>
@@ -47,20 +51,20 @@ setlocale(LC_TIME, "fr_FR", 'french');
 
         ?>
                 <div class="card">
-                    <h5 class="card-header"><?php echo $data->name; ?></h5>
+                    <h5 class="card-header"><?= $data->name; ?></h5>
                     <div class="card-body">
-                        <h5 class="card-title"><?php echo ucfirst(strftime("%A %d %B %G", strtotime($date))); ?> à <?php echo $heure ?></h5>
+                        <h5 class="card-title"><?= ucwords($date_fr->format($date)) ?> à <?= $hour_fr ?> (heure française)</h5>
                         <div class="card-content">
                             <div class="left">
-                                <img src="http://openweathermap.org/img/w/<?php echo $data->weather[0]->icon; ?>.png" class="weather-icon" />
+                                <img src="http://openweathermap.org/img/w/<?= $data->weather[0]->icon; ?>.png" class="weather-icon" />
                             </div>
                             <div class="center">
-                                <p class="card-text">T°max: <?php echo $data->main->temp_max; ?>°C</p>
-                                <p class="card-text">T°min: <?php echo $data->main->temp_min; ?>°C</p>
+                                <p class="card-text">T°max: <?= $data->main->temp_max; ?>°C</p>
+                                <p class="card-text">T°min: <?= $data->main->temp_min; ?>°C</p>
                             </div>
                             <div class="right">
-                                <p class="card-text">Humidité: <?php echo $data->main->humidity; ?> %</p>
-                                <p class="card-text">Vent: <?php echo $data->wind->speed; ?> km/h</p>
+                                <p class="card-text">Humidité: <?= $data->main->humidity; ?> %</p>
+                                <p class="card-text">Vent: <?= $data->wind->speed; ?> km/h</p>
                             </div>
                         </div>
                         <div class="wikipics"></div>
@@ -118,7 +122,7 @@ setlocale(LC_TIME, "fr_FR", 'french');
             });
         };
         articles.empty();
-        toSearch = "<?php echo $data->name ?>";
+        toSearch = "<?= $data->name ?>";
         ajaxArticleData();
 
 
@@ -129,8 +133,8 @@ setlocale(LC_TIME, "fr_FR", 'french');
 <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
 <script type="text/javascript">
     // On initialise la latitude et la longitude de Paris (centre de la carte)
-    var lat = "<?php echo $data->coord->lat; ?>";
-    var lon = "<?php echo $data->coord->lon; ?>";
+    var lat = "<?= $data->coord->lat; ?>";
+    var lon = "<?= $data->coord->lon; ?>";
     var macarte = null;
     // Fonction d'initialisation de la carte
     function initMap() {
@@ -144,7 +148,7 @@ setlocale(LC_TIME, "fr_FR", 'french');
             maxZoom: 15
         }).addTo(macarte);
         var marker = L.marker([lat, lon]).addTo(macarte);
-        marker.bindPopup('<?php echo $data->name; ?>');
+        marker.bindPopup('<?= $data->name; ?>');
     }
     window.onload = function() {
         // Fonction d'initialisation qui s'exécute lorsque le DOM est chargé
