@@ -47,7 +47,7 @@ $hour_fr=date('H:i');
         <?php
 
         if (isset($ville)) {
-            if ($data->cod != 404) {
+            if ($data->cod != 404 || $data->cod != 400) {
 
         ?>
                 <div class="card">
